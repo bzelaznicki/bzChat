@@ -1,0 +1,42 @@
+{
+  "name": "bzchat",
+  "version": "1.0.0",
+  "description": "Chat made with Node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bzelaznicki/bzChat.git"
+  },
+  "keywords": [
+    "chat",
+    "livechat"
+  ],
+  "author": "Bartosz Żelaźnicki",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bzelaznicki/bzChat/issues"
+  },
+  "homepage": "https://github.com/bzelaznicki/bzChat#readme",
+  "devDependencies": {
+    "@eslint/js": "^9.29.0",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.0.4",
+    "@typescript-eslint/eslint-plugin": "^8.35.0",
+    "@typescript-eslint/parser": "^8.35.0",
+    "eslint": "^9.29.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.5.0",
+    "globals": "^16.2.0",
+    "jest": "^30.0.2",
+    "prettier": "^3.6.0",
+    "ts-jest": "^29.4.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
