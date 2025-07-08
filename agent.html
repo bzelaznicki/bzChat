@@ -44,7 +44,7 @@
         div.onclick = async () => {
           selectedVisitor = data.email;
           chatDiv.innerHTML = '';
-          const res = await fetch(`http://localhost:8080/chats?email=${data.email}`);
+          const res = await fetch(`/chats?email=${data.email}`);
           const messages = await res.json();
           messages.forEach(msg => {
             const div = document.createElement('div');
