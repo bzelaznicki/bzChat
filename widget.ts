@@ -5,7 +5,9 @@ interface Message {
   timestamp: string;
 }
 
-const ws = new WebSocket('ws://bzchat.zelaznicki.com');
+const isLocal = window.location.host.includes('localhost') || window.location.host.includes('127.0.0.1');
+const wsUrl = isLocal ? 'ws://localhost:8080' : `wss://${window.location.host}`;
+const ws = new WebSocket(wsUrl);
 const chatDiv = document.createElement('div');
 chatDiv.id = 'chat';
 chatDiv.style.border = '1px solid #ccc';
