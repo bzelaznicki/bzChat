@@ -21,7 +21,9 @@
   </div>
 
   <script>
-    const ws = new WebSocket('ws://localhost:8080');
+    const isLocal = window.location.host.includes('localhost') || window.location.host.includes('127.0.0.1');
+    const wsUrl = isLocal ? 'ws://localhost:8080' : `wss://${window.location.host}`;
+    const ws = new WebSocket(wsUrl);
     const visitorsDiv = document.getElementById('visitors');
     const chatDiv = document.getElementById('chat');
     const messageInput = document.getElementById('message');
