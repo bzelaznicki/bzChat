@@ -5,7 +5,7 @@ interface Message {
   timestamp: string;
 }
 
-const ws = new WebSocket('ws://localhost:8080');
+const ws = new WebSocket('ws://bzchat.zelaznicki.com');
 const chatDiv = document.createElement('div');
 chatDiv.id = 'chat';
 chatDiv.style.border = '1px solid #ccc';
