@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Agent Dashboard</title>
+  <style>
+    #visitors { width: 200px; border: 1px solid #ccc; padding: 10px; }
+    #chat { width: 400px; height: 300px; overflow-y: scroll; border: 1px solid #ccc; padding: 10px; }
+    #message { width: 350px; margin: 10px; }
+    .visitor { cursor: pointer; padding: 5px; }
+    .visitor:hover { background: #f0f0f0; }
+  </style>
+</head>
+<body>
+  <div style="display: flex;">
+    <div id="visitors"></div>
+    <div>
+      <div id="chat"></div>
+      <input id="message" placeholder="Type a message...">
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <script>
+    const ws = new WebSocket('ws://localhost:8080');
+    const visitorsDiv = document.getElementById('visitors');
+    const chatDiv = document.getElementById('chat');
+    const messageInput = document.getElementById('message');
+    let selectedVisitor = null;
+
+    ws.onopen = () => {
+      ws.send(JSON.stringify({
+        type: 'init',
+        role: 'agent',
+        email: 'agent@example.com', 
+      }));
+    };
+
+    ws.onmessage = async (event) => {
+      const data = JSON.parse(event.data);
+      if (data.type === 'new_visitor') {
+        const div = document.createElement('div');
+        div.className = 'visitor';
+        div.textContent = data.name || data.email;
+        div.onclick = async () => {
+          selectedVisitor = data.email;
+          chatDiv.innerHTML = '';
+          const res = await fetch(`http://localhost:8080/chats?email=${data.email}`);
+          const messages = await res.json();
+          messages.forEach(msg => {
+            const div = document.createElement('div');
+            div.textContent = `${msg.sender === 'visitor' ? msg.name : 'Agent'}: ${msg.text}`;
+            chatDiv.appendChild(div);
+          });
+          chatDiv.scrollTop = chatDiv.scrollHeight;
+        };
+        visitorsDiv.appendChild(div);
+      } else if (data.email && selectedVisitor === data.email) {
+        const div = document.createElement('div');
+        div.textContent = `${data.sender === 'visitor' ? data.name : 'Agent'}: ${data.text}`;
+        chatDiv.appendChild(div);
+        chatDiv.scrollTop = chatDiv.scrollHeight;
+      }
+    };
+
+    function sendMessage() {
+      if (messageInput.value && selectedVisitor) {
+        ws.send(JSON.stringify({
+          type: 'message',
+          text: messageInput.value,
+          toEmail: selectedVisitor,
+        }));
+        // Display the agent's message immediately
+        const div = document.createElement('div');
+        div.textContent = `Agent: ${messageInput.value}`;
+        chatDiv.appendChild(div);
+        chatDiv.scrollTop = chatDiv.scrollHeight;
+        messageInput.value = '';
+      }
+    }
+
+    ws.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
+  </script>
+</body>
+</html>
