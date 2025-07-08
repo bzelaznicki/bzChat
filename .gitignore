@@ -134,3 +134,9 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# Deno
+deno.lock
+deno.json
+deno.jsonc
+.deno
